@@ -1,55 +1,92 @@
-# 🛒 Koda Storefront - متجر العملاء
+# 🛒 Koda Storefront - Customer Web Application
 
-مستودع واجهة العميل لمتجر **Koda Store**.
-هذا المستودع مخصص لأعضاء فريق المتجر (الأعضاء من 2 إلى 9) بقيادة العضو 1 (التيم ليد).
+Welcome to the **Koda Store** storefront repository! This workspace is dedicated to the **Storefront Team (Members 2 through 9)**, led by Member 1 (Team Leader).
 
-المشروع مبني بـ **React 18 + Vite + Tailwind CSS**.
-
----
-
-## 🔗 رابط السيرفر وتوثيق الـ API
-* **Base URL:** `https://e-commerce-api-3wara.vercel.app`
-* **توثيق Swagger الكامل لجميع الـ Endpoints:** [https://e-commerce-api-3wara.vercel.app/api-docs](https://e-commerce-api-3wara.vercel.app/api-docs)
+The project is built with **React 18**, **Vite**, **Tailwind CSS**, and **React Router DOM v6**.
 
 ---
 
-## 📚 دليل الربط اليدوي بالـ API لكل عضو (Manual API Integration)
+## 🔗 Live API & Swagger Documentation
 
-المطلوب من كل عضو كتابة كود الاتصال بالـ API **بيده ومباشرة** داخل مكونات صفحته باستخدام `axios` أو `fetch`:
+* **Base API URL:** `https://e-commerce-api-3wara.vercel.app`
+* **Interactive Swagger API Docs:** [https://e-commerce-api-3wara.vercel.app/api-docs](https://e-commerce-api-3wara.vercel.app/api-docs)
+* **Test Customer Credentials:** `customer@koda.com` / `customer1212`
 
-### 1. طلب جلب بيانات (GET):
+---
+
+## 🚀 Getting Started
+
+Follow these steps to set up your local development environment:
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/mariamabedghaly-cmyk/koda-storefront.git
+cd koda-storefront
+
+# 2. Switch to the develop branch
+git checkout develop
+
+# 3. Install dependencies
+npm install
+
+# 4. Create your feature branch (replace with your task and name)
+git checkout -b feature/cart-page-john
+
+# 5. Start the local development server
+npm run dev
+```
+
+The app will be running at `http://localhost:3000`.
+
+---
+
+## 📚 Manual API Integration Guide
+
+In this project, team members are required to write **direct, manual HTTP requests** using `axios` or native `fetch` within their components.
+
+### 1. Fetching Data (GET Request Example):
 ```jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default function MyComponent() {
-  const [data, setData] = useState([]);
+export default function ProductList() {
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loadData = async () => {
+    const fetchProducts = async () => {
       try {
         const response = await axios.get('https://e-commerce-api-3wara.vercel.app/products');
-        setData(response.data.products);
+        setProducts(response.data.products);
       } catch (err) {
         console.error(err.response?.data?.message || err.message);
       } finally {
         setLoading(false);
       }
     };
-    loadData();
+
+    fetchProducts();
   }, []);
 
-  if (loading) return <p>جاري التحميل...</p>;
-  return <div>{/* عرض البيانات */}</div>;
+  if (loading) return <p>Loading products...</p>;
+
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {products.map((item) => (
+        <div key={item._id} className="border p-4 rounded-xl">
+          <h3>{item.name}</h3>
+          <p>${item.price}</p>
+        </div>
+      ))}
+    </div>
+  );
 }
 ```
 
 ---
 
-### 2. طلب إرسال بيانات (POST) وتخزين الـ Token:
+### 2. Submitting Data & Storing Token (POST Request Example):
 ```jsx
-// مثال لتسجيل الدخول وحفظ التوكن في localStorage
 const handleLogin = async (email, password) => {
   try {
     const res = await axios.post('https://e-commerce-api-3wara.vercel.app/auth/login', {
@@ -57,40 +94,39 @@ const handleLogin = async (email, password) => {
       password,
     });
 
-    // احفظ التوكن بهذا الاسم بالضبط ليتعرف عليه باقي الموقع:
+    // Save token and user in localStorage with exact keys:
     localStorage.setItem('token', res.data.token);
     localStorage.setItem('user', JSON.stringify(res.data.user));
 
-    alert('تم تسجيل الدخول بنجاح!');
+    alert('Logged in successfully!');
   } catch (err) {
-    alert(err.response?.data?.message || 'فشل تسجيل الدخول');
+    alert(err.response?.data?.message || 'Login failed');
   }
 };
 ```
 
 ---
 
-### 3. طلب محمي يتطلب التوكن (Protected Request with Headers):
+### 3. Protected Requests with Authorization Header:
 ```jsx
-// مثال لإضافة منتج للسلة أو جلب طلبات العميل
 const addToCart = async (productId) => {
   const token = localStorage.getItem('token');
   if (!token) {
-    alert('يرجى تسجيل الدخول أولاً');
+    alert('Please sign in first');
     return;
   }
 
   try {
-    const res = await axios.post(
+    await axios.post(
       'https://e-commerce-api-3wara.vercel.app/carts/items',
       { productId, quantity: 1 },
       {
         headers: {
-          Authorization: `Bearer ${token}`, // تمرير التوكن يدوياً في الهيدرز
+          Authorization: `Bearer ${token}`, // Pass token in headers
         },
       }
     );
-    alert('تمت الإضافة للسلة بنجاح!');
+    alert('Product added to cart!');
   } catch (err) {
     console.error(err.response?.data?.message);
   }
@@ -99,35 +135,60 @@ const addToCart = async (productId) => {
 
 ---
 
-## 👥 مهام أعضاء فريق المتجر والـ Endpoints المسندة:
+## 👥 Team Task Distribution & API Endpoints
 
-| العضو | الميزة / الصفحة | الملفات المقترحة | الـ Endpoints اليدوية |
+| Member | Feature / Page | Target Files | Assigned Manual Endpoints |
 | :--- | :--- | :--- | :--- |
-| **عضو 2** | الدخول، التسجيل، و OTP | `pages/auth/Login.jsx`, `Register.jsx`, `VerifyOtp.jsx`, `ForgotPassword.jsx` | `POST /auth/login`<br>`POST /auth/register/send-otp`<br>`POST /auth/register/verify-otp`<br>`POST /auth/forgot-password/send-otp` |
-| **عضو 3** | الصفحة الرئيسية والتنقل | `pages/HomePage.jsx`, `components/layout/Navbar.jsx` | `GET /products?featured=true` |
-| **عضو 4** | كتالوج المنتجات والبحث | `pages/ShopPage.jsx`, `components/product/FilterSidebar.jsx` | `GET /products`<br>`GET /products/search?q={query}` |
-| **عضو 5** | تفاصيل المنتج والتقييمات | `pages/ProductDetailsPage.jsx`, `components/reviews/ReviewsSection.jsx` | `GET /products/{id}`<br>`POST /products/{id}/reviews` |
-| **عضو 6** | سلة التسوق والكوبونات | `pages/CartPage.jsx`, `components/cart/CartDrawer.jsx` | `GET /carts`<br>`POST /carts/items`<br>`PATCH /carts/items/{productId}`<br>`POST /carts/coupon` |
-| **عضو 7** | قائمة الرغبات والمفضلة | `pages/WishlistPage.jsx` | `GET /wishlists/my`<br>`POST /wishlists/add/{productId}`<br>`DELETE /wishlists/remove/{productId}` |
-| **عضو 8** | الدفع وتتبع الطلبات | `pages/CheckoutPage.jsx`, `pages/OrdersPage.jsx` | `POST /orders`<br>`GET /orders/my`<br>`PATCH /orders/my/{id}/cancel` |
-| **عضو 9** | الملف الشخصي والعناوين | `pages/ProfilePage.jsx` | `GET /auth/me`<br>`PUT /users/{id}` |
+| **Member 2** | Authentication & OTP | `pages/auth/Login.jsx`, `Register.jsx`, `VerifyOtp.jsx`, `ForgotPassword.jsx` | `POST /auth/login`<br>`POST /auth/register/send-otp`<br>`POST /auth/register/verify-otp`<br>`POST /auth/forgot-password/send-otp` |
+| **Member 3** | Home Page & Navigation | `pages/HomePage.jsx`, `components/layout/Navbar.jsx` | `GET /products?featured=true` |
+| **Member 4** | Shop Catalog & Filters | `pages/ShopPage.jsx`, `components/product/ProductFilters.jsx` | `GET /products`<br>`GET /products/search?q={query}` |
+| **Member 5** | Product Details & Reviews | `pages/ProductDetailsPage.jsx`, `components/reviews/ReviewsSection.jsx` | `GET /products/{id}`<br>`POST /products/{id}/reviews` |
+| **Member 6** | Cart & Coupon Logic | `pages/CartPage.jsx`, `components/cart/CartDrawer.jsx` | `GET /carts`<br>`POST /carts/items`<br>`PATCH /carts/items/{productId}`<br>`POST /carts/coupon` |
+| **Member 7** | Wishlist Management | `pages/WishlistPage.jsx` | `GET /wishlists/my`<br>`POST /wishlists/add/{productId}`<br>`DELETE /wishlists/remove/{productId}` |
+| **Member 8** | Checkout & Order Tracking | `pages/CheckoutPage.jsx`, `pages/OrdersPage.jsx` | `POST /orders`<br>`GET /orders/my`<br>`PATCH /orders/my/{id}/cancel` |
+| **Member 9** | Profile & Address Book | `pages/ProfilePage.jsx` | `GET /auth/me`<br>`PUT /users/{id}` |
 
 ---
 
-## 🚀 تشغيل المشروع محلياً
+## 📂 Project Structure
 
-```bash
-npm install
-npm run dev
+```
+koda-storefront/
+├── index.html
+├── package.json
+├── tailwind.config.js
+├── src/
+│   ├── components/
+│   │   ├── common/         # Reusable UI (Button, Input, Modal, LoadingSpinner, Skeleton, Toast)
+│   │   ├── layout/         # Navbar, Footer, Main Layout
+│   │   └── product/        # ProductCard
+│   ├── context/
+│   │   ├── AuthContext.jsx # Handles session, user, and token state
+│   │   ├── ThemeContext.jsx# Dark / Light mode toggle
+│   │   └── ToastContext.jsx# Pop-up notifications (success, error, info)
+│   ├── pages/              # Team pages (Home, Shop, Cart, Wishlist, Checkout, Profile, Auth)
+│   ├── routes/             # AppRoutes, ProtectedRoute, AdminRoute
+│   ├── App.jsx
+│   └── main.jsx
 ```
 
-## 🌿 نظام الفروع (Git Workflow)
-```bash
-git checkout develop
-git checkout -b feature/cart-page-name
-# اكتب كودك ثم:
-git add .
-git commit -m "feat: add cart coupon manual call"
-git push origin feature/cart-page-name
-# ثم افتح Pull Request لفرع develop على GitHub
-```
+---
+
+## 🌿 Git Branching & Contribution Workflow
+
+1. Always branch off the `develop` branch:
+   ```bash
+   git checkout develop
+   git pull origin develop
+   git checkout -b feature/your-feature-name
+   ```
+2. Commit your progress with descriptive conventional commit messages:
+   ```bash
+   git add .
+   git commit -m "feat: implement shopping cart quantity update"
+   ```
+3. Push your branch to GitHub:
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+4. Open a **Pull Request (PR)** targeting the `develop` branch on GitHub for code review.
