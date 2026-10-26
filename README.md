@@ -1,194 +1,245 @@
 # 🛒 Koda Storefront - Customer Web Application
 
-Welcome to the **Koda Store** storefront repository! This workspace is dedicated to the **Storefront Team (Members 2 through 9)**, led by Member 1 (Team Leader).
+Welcome to the **Koda Storefront** repository! This project represents the customer-facing web application of the Koda Store e-commerce platform.
 
-The project is built with **React 18**, **Vite**, **Tailwind CSS**, and **React Router DOM v6**.
-
----
-
-## 🔗 Live API & Swagger Documentation
-
-* **Base API URL:** `https://e-commerce-api-3wara.vercel.app`
-* **Interactive Swagger API Docs:** [https://e-commerce-api-3wara.vercel.app/api-docs](https://e-commerce-api-3wara.vercel.app/api-docs)
-* **Test Customer Credentials:** `customer@koda.com` / `customer1212`
+* **Repository:** [https://github.com/mariamabedghaly-cmyk/koda-storefront](https://github.com/mariamabedghaly-cmyk/koda-storefront)
+* **Team:** Member 1 (Team Leader) & Members 2 through 9
+* **Tech Stack:** React 18, Vite, Tailwind CSS, React Router DOM v6, Axios
 
 ---
 
-## 🚀 Getting Started
+## 🔗 Live Backend API & Documentation
 
-Follow these steps to set up your local development environment:
+* **Base URL:** `https://e-commerce-api-3wara.vercel.app`
+* **Swagger API Documentation:** [https://e-commerce-api-3wara.vercel.app/api-docs](https://e-commerce-api-3wara.vercel.app/api-docs)
+* **Test Customer Account:**
+  * **Email:** `customer@koda.com`
+  * **Password:** `customer1212`
+
+---
+
+## 🚀 Quick Start Guide
 
 ```bash
 # 1. Clone the repository
 git clone https://github.com/mariamabedghaly-cmyk/koda-storefront.git
 cd koda-storefront
 
-# 2. Switch to the develop branch
+# 2. Switch to develop branch
 git checkout develop
 
-# 3. Install dependencies
+# 3. Install packages
 npm install
 
-# 4. Create your feature branch (replace with your task and name)
-git checkout -b feature/cart-page-john
+# 4. Create your task branch
+git checkout -b feature/your-task-name
 
-# 5. Start the local development server
+# 5. Start development server
 npm run dev
 ```
 
-The app will be running at `http://localhost:3000`.
+---
+
+## 📚 Manual API Integration Rules for Everyone
+
+In this training project, **all team members must write manual API requests directly** in their page components using `axios`:
+
+1. **Unprotected Requests (GET):**
+   ```jsx
+   const res = await axios.get('https://e-commerce-api-3wara.vercel.app/products');
+   ```
+
+2. **Sending Data (POST):**
+   ```jsx
+   const res = await axios.post('https://e-commerce-api-3wara.vercel.app/auth/login', {
+     email,
+     password,
+   });
+   // Always save token with exact key:
+   localStorage.setItem('token', res.data.token);
+   localStorage.setItem('user', JSON.stringify(res.data.user));
+   ```
+
+3. **Protected Requests (with Token in Headers):**
+   ```jsx
+   const token = localStorage.getItem('token');
+   const res = await axios.post(
+     'https://e-commerce-api-3wara.vercel.app/carts/items',
+     { productId, quantity: 1 },
+     {
+       headers: {
+         Authorization: `Bearer ${token}`,
+       },
+     }
+   );
+   ```
 
 ---
 
-## 📚 Manual API Integration Guide
+## 👥 Detailed Member-by-Member Task Assignment
 
-In this project, team members are required to write **direct, manual HTTP requests** using `axios` or native `fetch` within their components.
-
-### 1. Fetching Data (GET Request Example):
-```jsx
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
-export default function ProductList() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get('https://e-commerce-api-3wara.vercel.app/products');
-        setProducts(response.data.products);
-      } catch (err) {
-        console.error(err.response?.data?.message || err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  if (loading) return <p>Loading products...</p>;
-
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      {products.map((item) => (
-        <div key={item._id} className="border p-4 rounded-xl">
-          <h3>{item.name}</h3>
-          <p>${item.price}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
-```
+### 👑 Member 1: Team Leader & Core Architecture
+* **Assigned Files:**
+  * `package.json`, `vite.config.js`, `tailwind.config.js`, `index.html`
+  * `src/components/common/` (`Button.jsx`, `Input.jsx`, `Modal.jsx`, `LoadingSpinner.jsx`, `Skeleton.jsx`, `Toast.jsx`)
+  * `src/context/` (`AuthContext.jsx`, `ThemeContext.jsx`, `ToastContext.jsx`)
+  * `src/routes/` (`AppRoutes.jsx`, `ProtectedRoute.jsx`)
+* **Responsibilities:**
+  * Set up foundational architecture, layouts, routing guards, and global state.
+  * Review all incoming Pull Requests (PRs) and merge them into `develop`.
 
 ---
 
-### 2. Submitting Data & Storing Token (POST Request Example):
-```jsx
-const handleLogin = async (email, password) => {
-  try {
-    const res = await axios.post('https://e-commerce-api-3wara.vercel.app/auth/login', {
-      email,
-      password,
-    });
-
-    // Save token and user in localStorage with exact keys:
-    localStorage.setItem('token', res.data.token);
-    localStorage.setItem('user', JSON.stringify(res.data.user));
-
-    alert('Logged in successfully!');
-  } catch (err) {
-    alert(err.response?.data?.message || 'Login failed');
-  }
-};
-```
+### 🔐 Member 2: Authentication & Two-Step OTP
+* **Target Files to Create/Edit:**
+  * `src/pages/auth/Login.jsx`
+  * `src/pages/auth/Register.jsx`
+  * `src/pages/auth/VerifyOtp.jsx`
+  * `src/pages/auth/ForgotPassword.jsx`
+* **Task Description:**
+  * Build the user sign-in page with validation.
+  * Build the registration flow with two steps: Step 1 (submit name, email, password, phone) $\rightarrow$ Step 2 (enter 6-digit OTP code sent to email).
+  * Build the forgot password flow with OTP reset.
+  * Save the authentication token to `localStorage.setItem('token', token)`.
+* **Manual Endpoints to Call:**
+  * `POST https://e-commerce-api-3wara.vercel.app/auth/login`
+  * `POST https://e-commerce-api-3wara.vercel.app/auth/register/send-otp`
+  * `POST https://e-commerce-api-3wara.vercel.app/auth/register/verify-otp`
+  * `POST https://e-commerce-api-3wara.vercel.app/auth/forgot-password/send-otp`
+  * `POST https://e-commerce-api-3wara.vercel.app/auth/forgot-password/verify-otp`
 
 ---
 
-### 3. Protected Requests with Authorization Header:
-```jsx
-const addToCart = async (productId) => {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    alert('Please sign in first');
-    return;
-  }
-
-  try {
-    await axios.post(
-      'https://e-commerce-api-3wara.vercel.app/carts/items',
-      { productId, quantity: 1 },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`, // Pass token in headers
-        },
-      }
-    );
-    alert('Product added to cart!');
-  } catch (err) {
-    console.error(err.response?.data?.message);
-  }
-};
-```
+### 🏠 Member 3: Home Page & Global Navigation
+* **Target Files to Create/Edit:**
+  * `src/pages/HomePage.jsx`
+  * `src/components/layout/Navbar.jsx`
+  * `src/components/layout/Footer.jsx`
+* **Task Description:**
+  * Design an engaging landing page with a promotional Hero Banner/Carousel.
+  * Build a Categories Grid section (Electronics, Audio, Fashion, etc.).
+  * Fetch and display featured products dynamically on the home page.
+  * Enhance the Navbar with responsive mobile menu and live cart/wishlist counters.
+* **Manual Endpoints to Call:**
+  * `GET https://e-commerce-api-3wara.vercel.app/products?featured=true`
 
 ---
 
-## 👥 Team Task Distribution & API Endpoints
-
-| Member | Feature / Page | Target Files | Assigned Manual Endpoints |
-| :--- | :--- | :--- | :--- |
-| **Member 2** | Authentication & OTP | `pages/auth/Login.jsx`, `Register.jsx`, `VerifyOtp.jsx`, `ForgotPassword.jsx` | `POST /auth/login`<br>`POST /auth/register/send-otp`<br>`POST /auth/register/verify-otp`<br>`POST /auth/forgot-password/send-otp` |
-| **Member 3** | Home Page & Navigation | `pages/HomePage.jsx`, `components/layout/Navbar.jsx` | `GET /products?featured=true` |
-| **Member 4** | Shop Catalog & Filters | `pages/ShopPage.jsx`, `components/product/ProductFilters.jsx` | `GET /products`<br>`GET /products/search?q={query}` |
-| **Member 5** | Product Details & Reviews | `pages/ProductDetailsPage.jsx`, `components/reviews/ReviewsSection.jsx` | `GET /products/{id}`<br>`POST /products/{id}/reviews` |
-| **Member 6** | Cart & Coupon Logic | `pages/CartPage.jsx`, `components/cart/CartDrawer.jsx` | `GET /carts`<br>`POST /carts/items`<br>`PATCH /carts/items/{productId}`<br>`POST /carts/coupon` |
-| **Member 7** | Wishlist Management | `pages/WishlistPage.jsx` | `GET /wishlists/my`<br>`POST /wishlists/add/{productId}`<br>`DELETE /wishlists/remove/{productId}` |
-| **Member 8** | Checkout & Order Tracking | `pages/CheckoutPage.jsx`, `pages/OrdersPage.jsx` | `POST /orders`<br>`GET /orders/my`<br>`PATCH /orders/my/{id}/cancel` |
-| **Member 9** | Profile & Address Book | `pages/ProfilePage.jsx` | `GET /auth/me`<br>`PUT /users/{id}` |
-
----
-
-## 📂 Project Structure
-
-```
-koda-storefront/
-├── index.html
-├── package.json
-├── tailwind.config.js
-├── src/
-│   ├── components/
-│   │   ├── common/         # Reusable UI (Button, Input, Modal, LoadingSpinner, Skeleton, Toast)
-│   │   ├── layout/         # Navbar, Footer, Main Layout
-│   │   └── product/        # ProductCard
-│   ├── context/
-│   │   ├── AuthContext.jsx # Handles session, user, and token state
-│   │   ├── ThemeContext.jsx# Dark / Light mode toggle
-│   │   └── ToastContext.jsx# Pop-up notifications (success, error, info)
-│   ├── pages/              # Team pages (Home, Shop, Cart, Wishlist, Checkout, Profile, Auth)
-│   ├── routes/             # AppRoutes, ProtectedRoute, AdminRoute
-│   ├── App.jsx
-│   └── main.jsx
-```
+### 📦 Member 4: Product Catalog, Search & Filtering
+* **Target Files to Create/Edit:**
+  * `src/pages/ShopPage.jsx` (or `ProductsPage.jsx`)
+  * `src/components/product/ProductFilters.jsx`
+* **Task Description:**
+  * Build the complete catalog shop page displaying products in a responsive grid.
+  * Build a sidebar filter system allowing users to filter by category, price range, and brand.
+  * Implement instant live search and pagination controls.
+* **Manual Endpoints to Call:**
+  * `GET https://e-commerce-api-3wara.vercel.app/products`
+  * `GET https://e-commerce-api-3wara.vercel.app/products/search?q={query}`
 
 ---
 
-## 🌿 Git Branching & Contribution Workflow
+### ⭐ Member 5: Product Details, Gallery & Reviews
+* **Target Files to Create/Edit:**
+  * `src/pages/ProductDetailsPage.jsx`
+  * `src/components/reviews/ReviewsSection.jsx`
+* **Task Description:**
+  * Build a comprehensive product details page: image gallery with zoom, price, discount badge, stock level, SKU, and quantity selector.
+  * Build customer reviews section showing star rating breakdown and review list.
+  * Build a form for authenticated customers to submit a new review and rating.
+* **Manual Endpoints to Call:**
+  * `GET https://e-commerce-api-3wara.vercel.app/products/{id}`
+  * `POST https://e-commerce-api-3wara.vercel.app/products/{id}/reviews` *(Requires Token in Headers)*
+  * `DELETE https://e-commerce-api-3wara.vercel.app/products/{id}/reviews/{reviewId}` *(Requires Token in Headers)*
 
-1. Always branch off the `develop` branch:
+---
+
+### 🛒 Member 6: Shopping Cart & Discount Coupons
+* **Target Files to Create/Edit:**
+  * `src/pages/CartPage.jsx`
+  * `src/components/cart/CartDrawer.jsx`
+* **Task Description:**
+  * Build the shopping cart view showing item thumbnail, title, price, quantity controls (`+` / `-`), and remove button.
+  * Implement coupon discount code input and calculate order subtotal, discount, and total.
+  * Provide a "Clear Cart" button and a checkout button redirecting to `/checkout`.
+* **Manual Endpoints to Call:**
+  * `GET https://e-commerce-api-3wara.vercel.app/carts`
+  * `POST https://e-commerce-api-3wara.vercel.app/carts/items`
+  * `PATCH https://e-commerce-api-3wara.vercel.app/carts/items/{productId}`
+  * `DELETE https://e-commerce-api-3wara.vercel.app/carts/items/{productId}`
+  * `POST https://e-commerce-api-3wara.vercel.app/carts/coupon`
+  * `DELETE https://e-commerce-api-3wara.vercel.app/carts/clear`
+  *(All cart requests require Token in Headers)*
+
+---
+
+### ❤️ Member 7: Wishlist Management
+* **Target Files to Create/Edit:**
+  * `src/pages/WishlistPage.jsx`
+  * `src/components/product/WishlistButton.jsx`
+* **Task Description:**
+  * Wire up the interactive heart icon on each product card to toggle wishlist state.
+  * Build the wishlist page displaying saved items.
+  * Provide quick action buttons to move items directly into the shopping cart or remove them.
+* **Manual Endpoints to Call:**
+  * `GET https://e-commerce-api-3wara.vercel.app/wishlists/my`
+  * `POST https://e-commerce-api-3wara.vercel.app/wishlists/add/{productId}`
+  * `DELETE https://e-commerce-api-3wara.vercel.app/wishlists/remove/{productId}`
+  * `DELETE https://e-commerce-api-3wara.vercel.app/wishlists/clear`
+  *(All wishlist requests require Token in Headers)*
+
+---
+
+### 💳 Member 8: Checkout & Customer Order Tracking
+* **Target Files to Create/Edit:**
+  * `src/pages/CheckoutPage.jsx`
+  * `src/pages/OrderSuccessPage.jsx`
+  * `src/pages/OrdersPage.jsx`
+* **Task Description:**
+  * Build the multi-step checkout screen: choose shipping address, select payment method (Cash on Delivery), and confirm purchase.
+  * Build the order success confirmation screen with order tracking ID.
+  * Build the "My Orders" history page showing order status badges (Pending, Processing, Shipped, Delivered) and a "Cancel Order" button for pending orders.
+* **Manual Endpoints to Call:**
+  * `POST https://e-commerce-api-3wara.vercel.app/orders`
+  * `GET https://e-commerce-api-3wara.vercel.app/orders/my`
+  * `GET https://e-commerce-api-3wara.vercel.app/orders/my/{id}`
+  * `PATCH https://e-commerce-api-3wara.vercel.app/orders/my/{id}/cancel`
+  *(All orders requests require Token in Headers)*
+
+---
+
+### 👤 Member 9: Customer Profile & Address Book
+* **Target Files to Create/Edit:**
+  * `src/pages/ProfilePage.jsx`
+  * `src/components/profile/AddressBook.jsx`
+* **Task Description:**
+  * Build user profile view to edit personal information (username, phone, avatar).
+  * Build address book management: form to add a new address (country, city, street, building, postal code), edit, delete, and set default address.
+* **Manual Endpoints to Call:**
+  * `GET https://e-commerce-api-3wara.vercel.app/auth/me`
+  * `PUT https://e-commerce-api-3wara.vercel.app/users/{id}`
+  *(All profile requests require Token in Headers)*
+
+---
+
+## 🌿 Contribution Rules (Git Workflow)
+
+1. Make sure your local `develop` branch is up to date:
    ```bash
    git checkout develop
    git pull origin develop
-   git checkout -b feature/your-feature-name
    ```
-2. Commit your progress with descriptive conventional commit messages:
+2. Create your isolated feature branch:
+   ```bash
+   git checkout -b feature/cart-page-yourname
+   ```
+3. Commit your code frequently:
    ```bash
    git add .
-   git commit -m "feat: implement shopping cart quantity update"
+   git commit -m "feat: implement cart items quantity increase and decrease"
    ```
-3. Push your branch to GitHub:
+4. Push your branch to GitHub:
    ```bash
-   git push origin feature/your-feature-name
+   git push origin feature/cart-page-yourname
    ```
-4. Open a **Pull Request (PR)** targeting the `develop` branch on GitHub for code review.
+5. Open a **Pull Request (PR)** on GitHub targeting `develop` for the Team Leader to review!
