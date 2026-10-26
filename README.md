@@ -6,6 +6,9 @@ Welcome to the **Koda Storefront** repository! This project represents the custo
 * **Team:** Member 1 (Team Leader) & Members 2 through 9
 * **Tech Stack:** React 18, Vite, Tailwind CSS, React Router DOM v6, Axios
 
+> ⚠️ **TRAINING WORKSPACE SPECIFICATION:**  
+> This repository is a **clean starter boilerplate**. There are **no pre-built components or pages** in the codebase. Each team member is required to **create their assigned files from scratch**, build the UI, and write the **manual API integration** directly using `axios` as specified below.
+
 ---
 
 ## 🔗 Live Backend API & Documentation
@@ -79,19 +82,18 @@ In this training project, **all team members must write manual API requests dire
 ## 👥 Detailed Member-by-Member Task Assignment
 
 ### 👑 Member 1: Team Leader & Core Architecture
-* **Assigned Files:**
-  * `package.json`, `vite.config.js`, `tailwind.config.js`, `index.html`
-  * `src/components/common/` (`Button.jsx`, `Input.jsx`, `Modal.jsx`, `LoadingSpinner.jsx`, `Skeleton.jsx`, `Toast.jsx`)
-  * `src/context/` (`AuthContext.jsx`, `ThemeContext.jsx`, `ToastContext.jsx`)
-  * `src/routes/` (`AppRoutes.jsx`, `ProtectedRoute.jsx`)
+* **Target Files to Setup:**
+  * `src/components/common/` (Shared UI: Buttons, Inputs, Modals, Spinners)
+  * `src/context/` (AuthContext, ThemeContext, ToastContext)
+  * `src/routes/` (AppRoutes, ProtectedRoute)
 * **Responsibilities:**
-  * Set up foundational architecture, layouts, routing guards, and global state.
+  * Define base layouts and route guards.
   * Review all incoming Pull Requests (PRs) and merge them into `develop`.
 
 ---
 
 ### 🔐 Member 2: Authentication & Two-Step OTP
-* **Target Files to Create/Edit:**
+* **Target Files to Create:**
   * `src/pages/auth/Login.jsx`
   * `src/pages/auth/Register.jsx`
   * `src/pages/auth/VerifyOtp.jsx`
@@ -111,7 +113,7 @@ In this training project, **all team members must write manual API requests dire
 ---
 
 ### 🏠 Member 3: Home Page & Global Navigation
-* **Target Files to Create/Edit:**
+* **Target Files to Create:**
   * `src/pages/HomePage.jsx`
   * `src/components/layout/Navbar.jsx`
   * `src/components/layout/Footer.jsx`
@@ -126,7 +128,7 @@ In this training project, **all team members must write manual API requests dire
 ---
 
 ### 📦 Member 4: Product Catalog, Search & Filtering
-* **Target Files to Create/Edit:**
+* **Target Files to Create:**
   * `src/pages/ShopPage.jsx` (or `ProductsPage.jsx`)
   * `src/components/product/ProductFilters.jsx`
 * **Task Description:**
@@ -140,7 +142,7 @@ In this training project, **all team members must write manual API requests dire
 ---
 
 ### ⭐ Member 5: Product Details, Gallery & Reviews
-* **Target Files to Create/Edit:**
+* **Target Files to Create:**
   * `src/pages/ProductDetailsPage.jsx`
   * `src/components/reviews/ReviewsSection.jsx`
 * **Task Description:**
@@ -155,7 +157,7 @@ In this training project, **all team members must write manual API requests dire
 ---
 
 ### 🛒 Member 6: Shopping Cart & Discount Coupons
-* **Target Files to Create/Edit:**
+* **Target Files to Create:**
   * `src/pages/CartPage.jsx`
   * `src/components/cart/CartDrawer.jsx`
 * **Task Description:**
@@ -174,7 +176,7 @@ In this training project, **all team members must write manual API requests dire
 ---
 
 ### ❤️ Member 7: Wishlist Management
-* **Target Files to Create/Edit:**
+* **Target Files to Create:**
   * `src/pages/WishlistPage.jsx`
   * `src/components/product/WishlistButton.jsx`
 * **Task Description:**
@@ -191,7 +193,7 @@ In this training project, **all team members must write manual API requests dire
 ---
 
 ### 💳 Member 8: Checkout & Customer Order Tracking
-* **Target Files to Create/Edit:**
+* **Target Files to Create:**
   * `src/pages/CheckoutPage.jsx`
   * `src/pages/OrderSuccessPage.jsx`
   * `src/pages/OrdersPage.jsx`
@@ -209,7 +211,7 @@ In this training project, **all team members must write manual API requests dire
 ---
 
 ### 👤 Member 9: Customer Profile & Address Book
-* **Target Files to Create/Edit:**
+* **Target Files to Create:**
   * `src/pages/ProfilePage.jsx`
   * `src/components/profile/AddressBook.jsx`
 * **Task Description:**
