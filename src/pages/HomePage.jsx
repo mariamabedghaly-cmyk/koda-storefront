@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Sparkles, ArrowRight, ShieldCheck, RefreshCw } from 'lucide-react';
-import axiosClient from '../api/axiosClient';
-import ENDPOINTS from '../api/endpoints';
+import axios from 'axios';
+import { Sparkles, ArrowRight, RefreshCw, Code } from 'lucide-react';
 import ProductCard from '../components/product/ProductCard';
 import Button from '../components/common/Button';
 import Skeleton from '../components/common/Skeleton';
@@ -17,26 +16,33 @@ export default function HomePage() {
   const { success, error: toastError, info } = useToast();
   const { isAuthenticated, user } = useAuth();
 
-  const fetchFeaturedProducts = async () => {
+  // =========================================================================
+  // 💡 مثال تعليمي للربط اليدوي بالـ API (Manual API Call Example):
+  // يمكن لأي عضو نسخ هذا النمط البسيط واستخدامه في صفحته
+  // =========================================================================
+  const fetchProductsManual = async () => {
     setLoading(true);
     setError(null);
+
     try {
-      // Calls live API: https://e-commerce-api-3wara.vercel.app/products
-      const data = await axiosClient.get(ENDPOINTS.PRODUCTS.LIST, {
+      // 1. الاتصال المباشر بالرابط يدوياً
+      const response = await axios.get('https://e-commerce-api-3wara.vercel.app/products', {
         params: { limit: 8 },
       });
-      const list = data.products || data.data || [];
-      setProducts(list);
+
+      // 2. استخراج البيانات وحفظها في الـ State
+      setProducts(response.data.products || []);
     } catch (err) {
-      setError(err.message);
-      toastError(`Failed to load products: ${err.message}`);
+      const msg = err.response?.data?.message || err.message || 'فشل جلب المنتجات';
+      setError(msg);
+      toastError(msg);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchFeaturedProducts();
+    fetchProductsManual();
   }, []);
 
   const handleAddToCart = (product) => {
@@ -54,7 +60,7 @@ export default function HomePage() {
         <div className="relative z-10 max-w-2xl space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-semibold tracking-wide border border-white/20">
             <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-            <span>Koda Store Core Architecture Ready</span>
+            <span>Koda Storefront - Ready for Team Work</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
@@ -62,7 +68,7 @@ export default function HomePage() {
           </h1>
 
           <p className="text-sm sm:text-base text-primary-100 leading-relaxed">
-            Welcome to the frontend workspace! This foundation includes pre-configured Axios client, JWT authentication context, dark mode, toast notifications, and shared UI components ready for team development.
+            هذا المستودع مخصص لأعضاء فريق المتجر (الأعضاء من 2 إلى 9). يتم الربط بالـ API يدوياً ومباشرة عبر روابط السيرفر في كل صفحة.
           </p>
 
           <div className="pt-2 flex flex-wrap items-center gap-3">
@@ -71,22 +77,21 @@ export default function HomePage() {
               size="lg"
               onClick={() => setIsDemoModalOpen(true)}
             >
-              Test Modal & Components
+              عرض مثال كود الربط اليدوي
             </Button>
             <Button
               variant="outline"
               size="lg"
               className="text-white border-white/30 hover:bg-white/10"
-              onClick={fetchFeaturedProducts}
+              onClick={fetchProductsManual}
               icon={RefreshCw}
               loading={loading}
             >
-              Refresh Live API Data
+              تحديث المنتجات يدوياً
             </Button>
           </div>
         </div>
 
-        {/* Decorative background circle */}
         <div className="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-white/10 blur-3xl pointer-events-none" />
       </section>
 
@@ -96,12 +101,10 @@ export default function HomePage() {
           <div className={`w-3 h-3 rounded-full ${isAuthenticated ? 'bg-emerald-500' : 'bg-slate-400'}`} />
           <div>
             <h4 className="text-xs font-bold text-slate-800 dark:text-slate-100">
-              Auth State: {isAuthenticated ? `Logged In as (${user?.email || 'User'})` : 'Guest Mode (Not logged in)'}
+              Auth State: {isAuthenticated ? `مسجل دخول باسم (${user?.email || 'User'})` : 'وضع الزائر (غير مسجل دخول)'}
             </h4>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">
-              {isAuthenticated
-                ? `Role: ${user?.role || 'customer'} | User ID: ${user?._id || 'N/A'}`
-                : 'Use test credentials from the README to sign in as admin or customer'}
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+              localStorage.getItem('token') = {localStorage.getItem('token') ? 'موجود ومتصل ✅' : 'null (سجل دخول لتجربة العمليات المحمية)'}
             </p>
           </div>
         </div>
@@ -110,9 +113,9 @@ export default function HomePage() {
           <Button
             size="sm"
             variant="outline"
-            onClick={() => success('Toast system is working perfectly!')}
+            onClick={() => success('نظام التنبيهات يعمل بنجاح!')}
           >
-            Trigger Success Toast
+            تجربة إشعار
           </Button>
         </div>
       </section>
@@ -122,10 +125,10 @@ export default function HomePage() {
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
-              Live Products from Backend API
+              منتجات حيّة مجلوبة يدوياً من السيرفر
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-              Fetched directly from <code className="text-primary-600 font-mono">/products</code> endpoint
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-mono">
+              GET https://e-commerce-api-3wara.vercel.app/products
             </p>
           </div>
 
@@ -134,15 +137,15 @@ export default function HomePage() {
             size="sm"
             icon={ArrowRight}
             className="hidden sm:inline-flex"
-            onClick={() => info('Catalog navigation')}
+            onClick={() => info('صفحة الكتالوج')}
           >
-            Explore Catalog
+            تصفح كل المنتجات
           </Button>
         </div>
 
         {error && (
           <div className="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900 text-rose-600 dark:text-rose-400 text-xs">
-            Failed to fetch products: {error}
+            فشل تحميل المنتجات: {error}
           </div>
         )}
 
@@ -173,39 +176,46 @@ export default function HomePage() {
             ))}
           </div>
         )}
-
-        {!loading && !error && products.length === 0 && (
-          <div className="p-12 text-center text-sm text-slate-500">
-            No products returned from the API yet.
-          </div>
-        )}
       </section>
 
-      {/* Demo Modal for testing */}
+      {/* Code Demo Modal */}
       <Modal
         isOpen={isDemoModalOpen}
         onClose={() => setIsDemoModalOpen(false)}
-        title="Reusable Modal Component"
+        title="طريقة الربط اليدوي لأعضاء الفريق"
+        maxWidth="max-w-xl"
         footer={
-          <>
-            <Button variant="outline" size="sm" onClick={() => setIsDemoModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button
-              size="sm"
-              onClick={() => {
-                success('Action confirmed!');
-                setIsDemoModalOpen(false);
-              }}
-            >
-              Confirm
-            </Button>
-          </>
+          <Button size="sm" onClick={() => setIsDemoModalOpen(false)}>
+            فهمت، إغلاق
+          </Button>
         }
       >
-        <p className="leading-relaxed">
-          This modal is ready for Member #12 (Order status changes), Member #5 (Reviews modal), or any member needing dialogs. It features backdrop blur, escape-key closing, focus locking, and full dark-mode compatibility!
-        </p>
+        <div className="space-y-3 text-xs">
+          <p className="font-semibold text-slate-700 dark:text-slate-200">
+            لكل عضو: استخدم مكتبة <code>axios</code> مباشرة مع الرابط الكامل:
+          </p>
+          <pre className="p-3.5 rounded-xl bg-slate-900 text-slate-100 font-mono overflow-x-auto text-[11px] leading-relaxed">
+{`import axios from 'axios';
+
+// 1. طلب عادي (GET):
+const res = await axios.get('https://e-commerce-api-3wara.vercel.app/products');
+
+// 2. طلب إرسال بيانات (POST):
+const res = await axios.post('https://e-commerce-api-3wara.vercel.app/auth/login', {
+  email,
+  password
+});
+
+// 3. طلب محمي بتوكن (مع الترويسات):
+const token = localStorage.getItem('token');
+const res = await axios.get('https://e-commerce-api-3wara.vercel.app/orders/my', {
+  headers: { Authorization: \`Bearer \${token}\` }
+});`}
+          </pre>
+          <p className="text-slate-500">
+            يمكنكم مراجعة ملف <code>README.md</code> للحصول على كل تفاصيل المسارات والـ Endpoints.
+          </p>
+        </div>
       </Modal>
     </div>
   );
