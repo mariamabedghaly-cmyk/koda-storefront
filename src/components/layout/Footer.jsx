@@ -44,11 +44,8 @@ export default function Footer() {
 
           <div>
             <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-3">
-              Project Info
+              Status
             </h4>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">
-              Frontend Internship Training Project
-            </p>
             <span className="inline-block px-2.5 py-1 text-[11px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-md border border-emerald-500/20">
               API Status: Online
             </span>
@@ -56,7 +53,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800 text-center text-xs text-slate-500 dark:text-slate-400">
-          © {new Date().getFullYear()} Koda Store. Built for Frontend Team Training.
+          © {new Date().getFullYear()} Koda Store. All rights reserved.
         </div>
       </div>
     </footer>
