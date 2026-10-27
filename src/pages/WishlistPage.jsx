@@ -52,9 +52,11 @@ async function moveToCart(id) {
     );
     await removeItem(id);
   } catch (err) {
-    console.log(err);
-    alert('Could not add this item to your cart');
-  }
+  console.log(err);
+  const msg = err.response?.data?.message || 'Could not add this item to your cart';
+  alert(msg);
+  return;
+}
 }
 
   async function clearAll() {
