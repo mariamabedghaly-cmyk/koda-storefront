@@ -4,7 +4,19 @@ Welcome to the **Koda Storefront** repository! This project represents the custo
 
 * **Repository:** [https://github.com/mariamabedghaly-cmyk/koda-storefront](https://github.com/mariamabedghaly-cmyk/koda-storefront)
 * **Team:** Member 1 (Team Leader) & Members 2 through 9
-* **Tech Stack:** React 18, Vite, Tailwind CSS, React Router DOM v6, Axios
+* **Tech Stack:** React 18, Vite, Tailwind CSS v3, React Router DOM v6, Axios, Lucide Icons (`lucide-react`), React Hook Form, Zod
+
+## 📦 Standardized Team Libraries (Installed & Ready)
+
+To prevent merge conflicts and inconsistent dependencies, the team uses a single unified stack:
+* **UI Styling:** Tailwind CSS (`tailwindcss`)
+* **Icons:** Lucide React (`lucide-react`) — *e.g. `import { ShoppingCart, User } from 'lucide-react'`*
+* **Routing:** React Router DOM (`react-router-dom`)
+* **HTTP Client:** Axios (`axios`)
+* **Form Handling:** React Hook Form (`react-hook-form`)
+* **Form Validation:** Zod (`zod`) + `@hookform/resolvers`
+
+---
 
 > ⚠️ **TRAINING WORKSPACE SPECIFICATION:**  
 > This repository is a **clean starter boilerplate**. There are **no pre-built components or pages** in the codebase. Each team member is required to **create their assigned files from scratch**, build the UI, and write the **manual API integration** directly using `axios` as specified below.
