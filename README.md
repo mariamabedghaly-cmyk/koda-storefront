@@ -4,7 +4,7 @@ Welcome to the **Koda Storefront** repository! This project represents the custo
 
 * **Repository:** [https://github.com/mariamabedghaly-cmyk/koda-storefront](https://github.com/mariamabedghaly-cmyk/koda-storefront)
 * **Team:** Member 1 (Team Leader) & Members 2 through 9
-* **Tech Stack:** React 18, Vite, Tailwind CSS v3, React Router DOM v6, Axios, Lucide Icons (`lucide-react`), React Hook Form, Zod
+* **Tech Stack:** React 19, Vite, Tailwind CSS v4, React Router DOM v6, Axios, Lucide Icons (`lucide-react`), React Hook Form, Zod
 
 ## 📦 Standardized Team Libraries (Installed & Ready)
 
